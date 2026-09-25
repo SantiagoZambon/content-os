@@ -1,0 +1,84 @@
+.detail-view-root {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.detail-header-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: rgba(18, 18, 18, 0.75);
+  border: 1px solid $color-border-subtle;
+  border-radius: $radius-xl;
+
+  @include respond-from($breakpoint-md) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.detail-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-title {
+  font-family: $font-display;
+  font-size: 1.85rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+  color: $color-text-main;
+}
+
+.detail-meta-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: $color-text-muted;
+}
+
+.detail-script-card {
+  background: rgba(14, 14, 14, 0.8);
+  border: 1px solid $color-border-subtle;
+  border-radius: $radius-xl;
+  padding: 2rem;
+  min-height: 350px;
+}
+
+.detail-script-title {
+  font-family: $font-display;
+  font-size: 1.25rem;
+  margin: 0 0 1.5rem 0;
+  color: $color-text-muted;
+  border-bottom: 1px solid $color-border-subtle;
+  padding-bottom: 0.75rem;
+}
+
+.detail-script-content {
+  font-family: $font-body;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #f0f0f0;
+
+  h1, h2, h3 {
+    font-family: $font-display;
+    color: $color-text-main;
+    margin-top: 1.5rem;
+  }
+
+  p {
+    margin-bottom: 1.2rem;
+  }
+
+  ul, ol {
+    padding-left: 1.75rem;
+    margin-bottom: 1.2rem;
+  }
+}

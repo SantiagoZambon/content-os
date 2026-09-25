@@ -1,5 +1,7 @@
 # PROMPTS
 
+## FASE - 1
+
 ### 1. Generar constitution.md
 ```
 Proyecto: [descripción].
@@ -10,6 +12,8 @@ lógica/interfaz, política de tests, persistencia de datos, e idioma
 del código y los mensajes. Máx. 15 líneas. Espera mi aprobación antes
 de crear el archivo.
 ```
+
+## FASE - 2
 
 ### 2. Generar spec.md
 ```
@@ -44,6 +48,8 @@ A partir de specs/<feature>/spec.md y plan.md, genera specs/<feature>/tasks.md:
 tareas chicas (máx. 20-30 min c/u), en orden de dependencia, cada una con
 los AC que cubre y un "Hecho cuando:" verificable. Usa checkboxes.
 ```
+
+## FASE - 3
 
 ### 5.a Implementar una tarea (Implementar tarea 1 a 1)
 ```

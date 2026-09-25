@@ -1,0 +1,24 @@
+@mixin respond-from($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+@mixin motion-reduced {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+@mixin glass-panel {
+  background: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid $color-border-subtle;
+}
