@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header class="content-os-header">
+    <div class="content-os-container content-os-header-inner">
+        <a href="#/kanban" class="content-os-brand">
+            <div class="signature-halo-wrapper">
+                <div class="signature-halo-glow"></div>
+                <div class="signature-halo-ring"></div>
+                <div class="signature-halo-content" style="width: 32px; height: 32px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+            </div>
+            <h1 class="content-os-title">Content OS</h1>
+        </a>
+
+        <nav class="content-os-nav">
+            <a href="#/kanban" class="content-os-nav-link is-active" id="nav-kanban">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="18"></rect>
+                    <rect x="14" y="3" width="7" height="10"></rect>
+                </svg>
+                <span>Tablero</span>
+            </a>
+            <a href="#/calendar" class="content-os-nav-link" id="nav-calendar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                </svg>
+                <span>Calendario</span>
+            </a>
+            <a href="#/content/new" class="content-os-nav-link" id="nav-new">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Nuevo</span>
+            </a>
+            <a href="#/settings" class="content-os-nav-link" id="nav-settings">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span>Ajustes</span>
+            </a>
+        </nav>
+    </div>
+</header>
+
+<main class="content-os-main">
+    <div class="content-os-container">
+        <section class="content-os-filter-bar" id="app-filter-bar">
+            <div class="content-os-filter-group">
+                <input type="text" id="filter-search" class="content-os-input" placeholder="Buscar por título...">
+                <select id="filter-channel" class="content-os-select">
+                    <option value="">Todas las redes</option>
+                </select>
+                <select id="filter-stage" class="content-os-select">
+                    <option value="">Todas las etapas</option>
+                </select>
+                <select id="filter-type" class="content-os-select">
+                    <option value="">Todos los tipos</option>
+                </select>
+                <input type="date" id="filter-start-date" class="content-os-input" title="Fecha desde">
+                <input type="date" id="filter-end-date" class="content-os-input" title="Fecha hasta">
+            </div>
+            <div>
+                <button type="button" id="btn-reset-filters" class="content-os-btn content-os-btn-sm">Limpiar filtros</button>
+            </div>
+        </section>
+
+        <section class="content-os-block app-fade-in" id="app-view-container">
+        </section>
+    </div>
+</main>
+
+<div id="modal-root"></div>
+
+<script type="module" src="/static/js/app.js"></script>
+{% endblock %}

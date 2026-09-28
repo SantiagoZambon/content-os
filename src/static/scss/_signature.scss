@@ -1,0 +1,97 @@
+@keyframes signature-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes signature-float {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(6px, -12px);
+    opacity: 0.55;
+  }
+}
+
+@keyframes entry-fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.signature-halo-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-full;
+  padding: 2px;
+}
+
+.signature-halo-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg, #ffffff, #5a5a58, #ffffff);
+  z-index: 0;
+  pointer-events: none;
+
+  @include motion-safe {
+    animation: signature-rotate 18s linear infinite;
+  }
+}
+
+.signature-halo-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg, rgba(255, 255, 255, 0.4), rgba(90, 90, 88, 0.2), rgba(255, 255, 255, 0.4));
+  filter: blur(10px);
+  z-index: -1;
+  opacity: 0.6;
+  pointer-events: none;
+
+  @include motion-safe {
+    animation: signature-rotate 18s linear infinite;
+  }
+}
+
+.signature-halo-content {
+  position: relative;
+  z-index: 1;
+  background: $color-bg-base;
+  border-radius: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signature-particle-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: $radius-full;
+  background: $color-accent-light;
+  pointer-events: none;
+  opacity: 0.3;
+
+  @include motion-safe {
+    animation: signature-float 9s ease-in-out infinite;
+  }
+}
+
+.app-fade-in {
+  @include motion-safe {
+    animation: entry-fade-rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}

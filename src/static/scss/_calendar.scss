@@ -1,0 +1,129 @@
+.calendar-view-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.calendar-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.calendar-month-heading {
+  font-family: $font-display;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+  color: $color-text-main;
+}
+
+.calendar-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+  background: $color-border-subtle;
+  border: 1px solid $color-border-subtle;
+  border-radius: $radius-xl;
+  overflow: hidden;
+}
+
+.calendar-day-header {
+  background: rgba(14, 14, 14, 0.95);
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.calendar-day-cell {
+  background: rgba(18, 18, 18, 0.85);
+  min-height: 100px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: background-color 0.2s ease;
+
+  &.is-outside-month {
+    opacity: 0.35;
+    background: rgba(12, 12, 12, 0.85);
+  }
+
+  &.is-today {
+    background: rgba(35, 35, 35, 0.9);
+  }
+
+  &.is-drag-over {
+    background: rgba(45, 45, 45, 0.95);
+    outline: 2px dashed $color-accent-light;
+    outline-offset: -2px;
+  }
+
+  @include respond-from($breakpoint-md) {
+    min-height: 125px;
+    padding: 0.75rem;
+  }
+}
+
+.calendar-day-number {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: $color-text-muted;
+  align-self: flex-end;
+}
+
+.calendar-day-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.calendar-event-item {
+  background: rgba(28, 28, 28, 0.95);
+  border: 1px solid $color-border-subtle;
+  border-radius: $radius-sm;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: grab;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    border-color: $color-border-hover;
+    background: rgba(40, 40, 40, 0.95);
+  }
+
+  &.is-dragging {
+    opacity: 0.35;
+  }
+}
+
+.calendar-event-title {
+  font-weight: 500;
+  color: $color-text-main;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar-event-tag {
+  font-size: 0.65rem;
+  color: $color-text-muted;
+}
