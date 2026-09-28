@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS stages (
 CREATE TABLE IF NOT EXISTS channels (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
+    color TEXT DEFAULT '#FFFFFF',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -38,4 +39,12 @@ export const DEFAULT_SEEDS = {
   stages: ['Idea', 'Guion', 'Grabacion', 'Edicion', 'Publicado'],
   channels: ['YouTube', 'Instagram', 'TikTok', 'Linkedin', 'X'],
   content_types: ['Video', 'Publicacion', 'Vertical', 'Articulo'],
+};
+
+export const DEFAULT_CHANNEL_COLORS = {
+  YouTube: '#FF0033',
+  Instagram: '#E1306C',
+  TikTok: '#00F2FE',
+  Linkedin: '#0A66C2',
+  X: '#F5F5F4',
 };

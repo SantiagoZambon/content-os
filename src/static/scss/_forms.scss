@@ -103,6 +103,7 @@
   resize: none;
   outline: none;
   box-sizing: border-box;
+  @include custom-scrollbar;
 
   &:focus {
     background: rgba(255, 255, 255, 0.01);
@@ -118,6 +119,7 @@
   color: $color-text-main;
   box-sizing: border-box;
   background: rgba(8, 8, 8, 0.5);
+  @include custom-scrollbar;
 
   h1, h2, h3, h4 {
     font-family: $font-display;

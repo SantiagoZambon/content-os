@@ -20,6 +20,8 @@ def test_index_page_contains_all_core_requirements(client):
     # Typography & Styles Context
     assert "Fraunces" in html
     assert "Inter" in html
+    # Favicon & Assets
+    assert "/static/content-os-favicon.png" in html
     assert "/static/css/main.css" in html
     assert "/static/vendor/sqlite3.js" in html
     assert "/static/js/app.js" in html
@@ -59,3 +61,12 @@ def test_static_assets_served_with_correct_security_headers(client):
 
     proxy_res = client.get("/static/vendor/sqlite3-opfs-async-proxy.js")
     assert proxy_res.status_code == 200
+
+
+def test_favicon_routes(client):
+    res_ico = client.get("/favicon.ico")
+    assert res_ico.status_code == 200
+    assert res_ico.mimetype == "image/png"
+
+    res_png = client.get("/static/content-os-favicon.png")
+    assert res_png.status_code == 200

@@ -9,6 +9,7 @@ export function renderContentDetailHtml(content) {
   const safeChannel = MarkdownService.escapeHtml(content.channel_name || 'Sin red');
   const safeStage = MarkdownService.escapeHtml(content.stage_name || 'Sin etapa');
   const safeType = MarkdownService.escapeHtml(content.content_type_name || 'Sin tipo');
+  const channelColor = content.channel_color || '#FFFFFF';
   const scriptHtml = content.script
     ? MarkdownService.render(content.script)
     : '<p style="color:#666; font-style:italic;">No hay guión redactado para este contenido.</p>';
@@ -19,9 +20,9 @@ export function renderContentDetailHtml(content) {
             <div class="detail-main-info">
                 <div style="display:flex; align-items:center; gap:0.75rem;">
                     <div class="signature-halo-wrapper">
-                        <div class="signature-halo-glow"></div>
-                        <div class="signature-halo-ring"></div>
-                        <div class="signature-halo-content" style="padding: 0.35rem 0.75rem; font-size:0.75rem; font-weight:600;">
+                        <div class="signature-halo-glow" style="background: conic-gradient(from 0deg, ${channelColor}66, rgba(90,90,88,0.3), ${channelColor}66);"></div>
+                        <div class="signature-halo-ring" style="background: conic-gradient(from 0deg, ${channelColor}, #5a5a58, ${channelColor});"></div>
+                        <div class="signature-halo-content" style="padding: 0.35rem 0.75rem; font-size:0.75rem; font-weight:600; color: ${channelColor};">
                             ${safeChannel}
                         </div>
                     </div>

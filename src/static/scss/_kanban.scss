@@ -4,6 +4,43 @@
   gap: 1.5rem;
 }
 
+.kanban-columns-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.kanban-edge-glow-left,
+.kanban-edge-glow-right {
+  position: absolute;
+  top: 0;
+  bottom: 1.5rem;
+  width: 36px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.kanban-edge-glow-left {
+  left: 0;
+  background: linear-gradient(to right, rgba(10, 10, 10, 0.95), transparent);
+  box-shadow: inset 12px 0 18px -8px rgba(255, 255, 255, 0.15);
+}
+
+.kanban-edge-glow-right {
+  right: 0;
+  background: linear-gradient(to left, rgba(10, 10, 10, 0.95), transparent);
+  box-shadow: inset -12px 0 18px -8px rgba(255, 255, 255, 0.2);
+}
+
+.kanban-columns-wrapper.has-overflow-left .kanban-edge-glow-left {
+  opacity: 1;
+}
+
+.kanban-columns-wrapper.has-overflow-right .kanban-edge-glow-right {
+  opacity: 1;
+}
+
 .kanban-columns-container {
   display: flex;
   gap: 1.25rem;
@@ -11,6 +48,7 @@
   padding-bottom: 1.5rem;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
+  @include custom-scrollbar;
 }
 
 .kanban-column {
@@ -69,6 +107,7 @@
   overflow-y: auto;
   flex: 1;
   min-height: 120px;
+  @include custom-scrollbar;
 }
 
 .kanban-card {

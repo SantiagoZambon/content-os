@@ -28,6 +28,8 @@ describe('KanbanView - HTML Structure (AC-9, AC-10, AC-11, AC-20, AC-21, AC-28, 
     });
 
     assert.match(html, /class="kanban-view-root/);
+    assert.match(html, /kanban-columns-wrapper/);
+    assert.match(html, /kanban-edge-glow-right/);
     assert.match(html, /class="kanban-column"/);
     assert.match(html, /data-stage-id="1"/);
     assert.match(html, /data-stage-id="2"/);

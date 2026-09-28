@@ -15,6 +15,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  @include custom-scrollbar;
 }
 
 .content-os-container {
@@ -88,6 +89,7 @@
   gap: 0.5rem;
   overflow-x: auto;
   padding-bottom: 0.25rem;
+  @include custom-scrollbar;
 
   @include respond-from($breakpoint-md) {
     gap: 0.75rem;

@@ -66,6 +66,10 @@
   font-size: 1.05rem;
   line-height: 1.8;
   color: #f0f0f0;
+  overflow-y: auto;
+  max-height: 65vh;
+  padding-right: 0.5rem;
+  @include custom-scrollbar;
 
   h1, h2, h3 {
     font-family: $font-display;

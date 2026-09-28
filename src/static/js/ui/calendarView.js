@@ -72,11 +72,12 @@ export function renderCalendarHtml({ year, month, days = [], contentsByDate = {}
         .map((item) => {
           const safeTitle = MarkdownService.escapeHtml(item.title);
           const safeChannel = MarkdownService.escapeHtml(item.channel_name || 'Sin red');
+          const channelColor = item.channel_color || '#FFFFFF';
 
           return `
-            <div class="calendar-event-item" data-content-id="${item.id}" role="button" tabindex="0">
+            <div class="calendar-event-item" data-content-id="${item.id}" role="button" tabindex="0" style="border-left: 2px solid ${channelColor};">
                 <span class="calendar-event-title">${safeTitle}</span>
-                <span class="calendar-event-tag">${safeChannel}</span>
+                <span class="calendar-event-tag" style="color: ${channelColor};">${safeChannel}</span>
             </div>
           `;
         })

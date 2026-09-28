@@ -1,4 +1,4 @@
-import { SCHEMA_SQL, DEFAULT_SEEDS } from './schema.js';
+import { SCHEMA_SQL, DEFAULT_SEEDS, DEFAULT_CHANNEL_COLORS } from './schema.js';
 
 export class Repository {
   constructor() {
@@ -43,6 +43,7 @@ export class Repository {
 
         this.dbId = openRes.dbId;
         await this.promiser('exec', { dbId: this.dbId, sql: SCHEMA_SQL });
+        await this.runMigrations();
         await this.seedDefaults();
         this.isReady = true;
         return this;
@@ -61,6 +62,7 @@ export class Repository {
 
       this.db = new sqlite3.oo1.DB('/content_os.sqlite3', 'c');
       this.db.exec(SCHEMA_SQL);
+      await this.runMigrations();
       await this.seedDefaults();
       this.isReady = true;
       return this;
@@ -75,6 +77,7 @@ export class Repository {
       const { DatabaseSync } = await import('node:sqlite');
       this.db = new DatabaseSync(':memory:');
       this.db.exec(SCHEMA_SQL);
+      await this.runMigrations();
       await this.seedDefaults();
       this.isReady = true;
       return this;
@@ -84,12 +87,31 @@ export class Repository {
       const sqlite3 = await window.sqlite3InitModule();
       this.db = new sqlite3.oo1.DB(':memory:', 'c');
       this.db.exec(SCHEMA_SQL);
+      await this.runMigrations();
       await this.seedDefaults();
       this.isReady = true;
       return this;
     }
 
     throw new Error('Unable to initialize in-memory database');
+  }
+
+  async runMigrations() {
+    try {
+      const channelCols = await this.query('PRAGMA table_info(channels)');
+      const hasColor = channelCols && channelCols.some((col) => col.name === 'color');
+      if (!hasColor) {
+        await this.exec("ALTER TABLE channels ADD COLUMN color TEXT DEFAULT '#FFFFFF'");
+        for (const [name, color] of Object.entries(DEFAULT_CHANNEL_COLORS)) {
+          await this.exec(
+            'UPDATE channels SET color = ? WHERE name = ?',
+            [color, name]
+          );
+        }
+      }
+    } catch (err) {
+      console.warn('Migration error (ignored if column already exists):', err);
+    }
   }
 
   async seedDefaults() {
@@ -108,7 +130,8 @@ export class Repository {
     const channels = await this.query('SELECT COUNT(*) as count FROM channels');
     if (channels[0]?.count === 0) {
       for (const channel of DEFAULT_SEEDS.channels) {
-        await this.exec('INSERT INTO channels (name) VALUES (?)', [channel]);
+        const color = DEFAULT_CHANNEL_COLORS[channel] || '#FFFFFF';
+        await this.exec('INSERT INTO channels (name, color) VALUES (?, ?)', [channel, color]);
       }
     }
 
@@ -254,8 +277,8 @@ export class Repository {
     if (Array.isArray(payload.channels)) {
       for (const channel of payload.channels) {
         await this.exec(
-          'INSERT INTO channels (id, name) VALUES (?, ?)',
-          [channel.id, channel.name]
+          'INSERT INTO channels (id, name, color) VALUES (?, ?, ?)',
+          [channel.id, channel.name, channel.color || '#FFFFFF']
         );
       }
     }
