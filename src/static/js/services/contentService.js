@@ -111,6 +111,7 @@ export class ContentService {
         s.name AS stage_name,
         s.position AS stage_position,
         ch.name AS channel_name,
+        ch.color AS channel_color,
         ct.name AS content_type_name
       FROM contents c
       LEFT JOIN stages s ON c.stage_id = s.id
@@ -128,6 +129,7 @@ export class ContentService {
         s.name AS stage_name,
         s.position AS stage_position,
         ch.name AS channel_name,
+        ch.color AS channel_color,
         ct.name AS content_type_name
       FROM contents c
       LEFT JOIN stages s ON c.stage_id = s.id

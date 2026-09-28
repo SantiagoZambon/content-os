@@ -12,11 +12,13 @@ export function renderKanbanHtml({ stages = [], contentsByStage = {} }) {
           const safeChannel = MarkdownService.escapeHtml(content.channel_name || 'Sin red');
           const safeType = MarkdownService.escapeHtml(content.content_type_name || 'General');
           const safeDate = MarkdownService.escapeHtml(content.publish_date);
+          const channelColor = content.channel_color || '#FFFFFF';
+          const badgeStyle = `color: ${channelColor}; border-color: ${channelColor}55; background: ${channelColor}18;`;
 
           return `
             <div class="kanban-card" data-content-id="${content.id}" role="button" tabindex="0">
                 <div class="kanban-card-badges">
-                    <span class="kanban-card-badge">${safeChannel}</span>
+                    <span class="kanban-card-badge" style="${badgeStyle}">${safeChannel}</span>
                     <span class="kanban-card-badge" style="background:transparent;">${safeType}</span>
                 </div>
                 <h4 class="kanban-card-title">${safeTitle}</h4>
@@ -44,8 +46,12 @@ export function renderKanbanHtml({ stages = [], contentsByStage = {} }) {
 
   return `
     <div class="kanban-view-root">
-        <div class="kanban-columns-container">
-            ${columnsHtml}
+        <div class="kanban-columns-wrapper">
+            <div class="kanban-edge-glow-left" aria-hidden="true"></div>
+            <div class="kanban-columns-container">
+                ${columnsHtml}
+            </div>
+            <div class="kanban-edge-glow-right" aria-hidden="true"></div>
         </div>
     </div>
   `;
@@ -138,6 +144,27 @@ export class KanbanView {
         });
       }
     }
+
+    this.setupScrollGlow();
+  }
+
+  setupScrollGlow() {
+    const wrapper = this.container.querySelector('.kanban-columns-wrapper');
+    const scrollContainer = this.container.querySelector('.kanban-columns-container');
+    if (!wrapper || !scrollContainer) return;
+
+    const checkOverflow = () => {
+      const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      const hasLeft = scrollContainer.scrollLeft > 6;
+      const hasRight = maxScroll - scrollContainer.scrollLeft > 6;
+
+      wrapper.classList.toggle('has-overflow-left', hasLeft);
+      wrapper.classList.toggle('has-overflow-right', hasRight);
+    };
+
+    scrollContainer.addEventListener('scroll', checkOverflow, { passive: true });
+    window.addEventListener('resize', checkOverflow, { passive: true });
+    requestAnimationFrame(checkOverflow);
   }
 
   destroy() {

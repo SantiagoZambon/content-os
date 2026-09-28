@@ -26,6 +26,8 @@ describe('SettingsView - Markup & Structure (AC-22, AC-25, AC-26, AC-27, AC-28, 
     assert.match(html, /id="btn-import-backup"/);
     assert.match(html, /id="form-add-stage"/);
     assert.match(html, /id="form-add-channel"/);
+    assert.match(html, /id="input-new-channel-color"/);
+    assert.match(html, /settings-channel-swatch/);
     assert.match(html, /id="form-add-type"/);
     assert.match(html, /data-delete-stage="1"/);
   });

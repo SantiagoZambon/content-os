@@ -1,4 +1,5 @@
 import { MarkdownService } from '../services/markdownService.js';
+import { alertModal } from './modal.js';
 
 export function renderContentFormHtml({
   content = null,
@@ -273,6 +274,10 @@ export class ContentFormView {
         }
       } catch (err) {
         console.error('Error saving content:', err);
+        await alertModal({
+          title: 'Error al guardar',
+          message: err.message || 'No se pudo guardar el contenido.',
+        });
       }
     });
   }

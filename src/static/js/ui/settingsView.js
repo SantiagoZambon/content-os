@@ -17,7 +17,10 @@ export function renderSettingsHtml({ stages = [], channels = [], contentTypes = 
     .map(
       (c) => `
         <div class="settings-item-row">
-            <span>${MarkdownService.escapeHtml(c.name)}</span>
+            <div style="display:flex; align-items:center; gap:0.65rem;">
+                <span class="settings-channel-swatch" style="background-color: ${c.color || '#FFFFFF'};"></span>
+                <span>${MarkdownService.escapeHtml(c.name)}</span>
+            </div>
             <button type="button" class="content-os-btn content-os-btn-sm content-os-btn-danger" data-delete-channel="${c.id}" aria-label="Eliminar red social">✕</button>
         </div>
       `
@@ -60,6 +63,7 @@ export function renderSettingsHtml({ stages = [], channels = [], contentTypes = 
                     ${channelsListHtml}
                 </div>
                 <form id="form-add-channel" class="settings-add-form">
+                    <input type="color" id="input-new-channel-color" value="#00F2FE" class="content-os-color-input" title="Elegir color de la red">
                     <input type="text" id="input-new-channel" class="content-os-input" placeholder="Nueva red..." style="flex:1;" required>
                     <button type="submit" class="content-os-btn content-os-btn-sm content-os-btn-primary">Añadir</button>
                 </form>
@@ -174,10 +178,12 @@ export class SettingsView {
     // Add channel
     const addChannelForm = this.container.querySelector('#form-add-channel');
     const inputNewChannel = this.container.querySelector('#input-new-channel');
+    const inputNewChannelColor = this.container.querySelector('#input-new-channel-color');
     addChannelForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
       try {
-        await this.settingsService.createChannel(inputNewChannel.value);
+        const color = inputNewChannelColor?.value || '#FFFFFF';
+        await this.settingsService.createChannel(inputNewChannel.value, color);
         await this.render();
       } catch (err) {
         await alertModal({ title: 'Error', message: err.message });

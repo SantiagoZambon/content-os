@@ -22,13 +22,15 @@ describe('SettingsService - Defaults & Configurations (AC-1, AC-2, AC-3, AC-22, 
     );
   });
 
-  test('AC-2: Retrieves the 5 default channels', async () => {
+  test('AC-2: Retrieves the 5 default channels with predefined colors', async () => {
     const channels = await service.getChannels();
     assert.equal(channels.length, 5);
     assert.deepEqual(
       channels.map((c) => c.name),
       ['YouTube', 'Instagram', 'TikTok', 'Linkedin', 'X']
     );
+    const yt = channels.find((c) => c.name === 'YouTube');
+    assert.equal(yt.color, '#FF0033');
   });
 
   test('AC-3: Retrieves the 4 default content types', async () => {
@@ -48,8 +50,9 @@ describe('SettingsService - Defaults & Configurations (AC-1, AC-2, AC-3, AC-22, 
     const updated = await service.updateStage(newStage.id, 'Under Review');
     assert.equal(updated.name, 'Under Review');
 
-    const newChannel = await service.createChannel('Threads');
+    const newChannel = await service.createChannel('Threads', '#000000');
     assert.equal(newChannel.name, 'Threads');
+    assert.equal(newChannel.color, '#000000');
 
     const newType = await service.createContentType('Podcast');
     assert.equal(newType.name, 'Podcast');

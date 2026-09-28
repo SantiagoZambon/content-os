@@ -78,7 +78,7 @@ export class SettingsService {
     return this.repo.queryOne('SELECT * FROM channels WHERE id = ?', [id]);
   }
 
-  async createChannel(name) {
+  async createChannel(name, color = '#FFFFFF') {
     const trimmed = (name ?? '').trim();
     if (!trimmed) {
       throw new Error('El nombre de la red social no puede estar vacío');
@@ -89,11 +89,12 @@ export class SettingsService {
       throw new Error(`Ya existe una red social con el nombre "${trimmed}"`);
     }
 
-    const res = await this.repo.exec('INSERT INTO channels (name) VALUES (?)', [trimmed]);
+    const validColor = color && color.startsWith('#') ? color : '#FFFFFF';
+    const res = await this.repo.exec('INSERT INTO channels (name, color) VALUES (?, ?)', [trimmed, validColor]);
     return this.getChannelById(res.lastInsertRowId);
   }
 
-  async updateChannel(id, name) {
+  async updateChannel(id, name, color = null) {
     const trimmed = (name ?? '').trim();
     if (!trimmed) {
       throw new Error('El nombre de la red social no puede estar vacío');
@@ -107,7 +108,11 @@ export class SettingsService {
       throw new Error(`Ya existe una red social con el nombre "${trimmed}"`);
     }
 
-    await this.repo.exec('UPDATE channels SET name = ? WHERE id = ?', [trimmed, id]);
+    if (color !== null) {
+      await this.repo.exec('UPDATE channels SET name = ?, color = ? WHERE id = ?', [trimmed, color, id]);
+    } else {
+      await this.repo.exec('UPDATE channels SET name = ? WHERE id = ?', [trimmed, id]);
+    }
     return this.getChannelById(id);
   }
 
