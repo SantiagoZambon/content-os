@@ -1,7 +1,13 @@
 import { MarkdownService } from '../services/markdownService.js';
 import { confirmModal, alertModal } from './modal.js';
 
-export function renderSettingsHtml({ stages = [], channels = [], contentTypes = [] }) {
+export function renderSettingsHtml({
+  stages = [],
+  channels = [],
+  contentTypes = [],
+  isServerMode = false,
+  currentUser = null,
+}) {
   const stagesListHtml = stages
     .map(
       (s) => `
@@ -38,11 +44,33 @@ export function renderSettingsHtml({ stages = [], channels = [], contentTypes = 
     )
     .join('');
 
+  const modeDescription = isServerMode
+    ? `Modo Servidor — Sesión activa (${currentUser || 'admin'})`
+    : 'Modo Local (OPFS) — Los datos se guardan en este dispositivo';
+
+  const logoutButtonHtml = isServerMode
+    ? `
+        <form action="/logout" method="POST" id="form-logout">
+            <button type="submit" class="content-os-btn content-os-btn-sm content-os-btn-danger">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Cerrar sesión</span>
+            </button>
+        </form>
+    `
+    : '';
+
   return `
     <div class="settings-view-root">
-        <div style="border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:1rem;">
-            <h2 class="content-os-title" style="font-size:1.6rem;">Configuración y Ajustes</h2>
-            <p style="color:#9c9c9a; margin:0.35rem 0 0 0; font-size:0.875rem;">Administra tus etapas, canales, tipos de publicación y copias de seguridad locales.</p>
+        <div style="border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+            <div>
+                <h2 class="content-os-title" style="font-size:1.6rem;">Configuración y Ajustes</h2>
+                <p style="color:#9c9c9a; margin:0.35rem 0 0 0; font-size:0.875rem;">${modeDescription}</p>
+            </div>
+            ${logoutButtonHtml}
         </div>
 
         <div class="settings-grid">
@@ -110,10 +138,11 @@ export function renderSettingsHtml({ stages = [], channels = [], contentTypes = 
 }
 
 export class SettingsView {
-  constructor(container, { settingsService, backupService, router }) {
+  constructor(container, { settingsService, backupService, repository, router }) {
     this.container = container;
     this.settingsService = settingsService;
     this.backupService = backupService;
+    this.repository = repository;
     this.router = router;
   }
 
@@ -125,11 +154,15 @@ export class SettingsView {
     const stages = await this.settingsService.getStages();
     const channels = await this.settingsService.getChannels();
     const contentTypes = await this.settingsService.getContentTypes();
+    const isServerMode = this.repository?.isServerMode?.() || false;
+    const currentUser = this.repository?.currentUser || null;
 
     this.container.innerHTML = renderSettingsHtml({
       stages,
       channels,
       contentTypes,
+      isServerMode,
+      currentUser,
     });
 
     this.setupInteractions(stages, channels, contentTypes);

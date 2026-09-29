@@ -30,5 +30,21 @@ describe('SettingsView - Markup & Structure (AC-22, AC-25, AC-26, AC-27, AC-28, 
     assert.match(html, /settings-channel-swatch/);
     assert.match(html, /id="form-add-type"/);
     assert.match(html, /data-delete-stage="1"/);
+    assert.doesNotMatch(html, /id="form-logout"/);
+  });
+
+  test('AC-8: Shows logout button and server status when in server mode', () => {
+    const html = renderSettingsHtml({
+      stages: dummyStages,
+      channels: dummyChannels,
+      contentTypes: dummyTypes,
+      isServerMode: true,
+      currentUser: 'admin',
+    });
+
+    assert.match(html, /Modo Servidor/);
+    assert.match(html, /admin/);
+    assert.match(html, /id="form-logout"/);
+    assert.match(html, /Cerrar sesión/);
   });
 });
