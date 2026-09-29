@@ -5,12 +5,45 @@ export class Repository {
     this.db = null;
     this.promiser = null;
     this.dbId = null;
+    this.mode = 'local'; // 'local' | 'server'
+    this.currentUser = null;
     this.isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
     this.isReady = false;
   }
 
+  isServerMode() {
+    return this.mode === 'server';
+  }
+
+  async checkAuthStatus() {
+    if (typeof fetch !== 'undefined') {
+      try {
+        const res = await fetch('/api/auth/status');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.authenticated) {
+            this.mode = 'server';
+            this.currentUser = data.user || 'admin';
+            return true;
+          }
+        }
+      } catch (e) {
+        console.warn('Auth status check skipped or failed:', e);
+      }
+    }
+    this.mode = 'local';
+    this.currentUser = null;
+    return false;
+  }
+
   async init(options = {}) {
-    if (this.isReady && (this.db || this.promiser)) {
+    if (this.isReady && (this.db || this.promiser || this.mode === 'server')) {
+      return this;
+    }
+
+    const isAuth = await this.checkAuthStatus();
+    if (isAuth) {
+      this.isReady = true;
       return this;
     }
 
@@ -46,6 +79,7 @@ export class Repository {
         await this.runMigrations();
         await this.seedDefaults();
         this.isReady = true;
+        this.mode = 'local';
         return this;
       }
 
@@ -65,6 +99,7 @@ export class Repository {
       await this.runMigrations();
       await this.seedDefaults();
       this.isReady = true;
+      this.mode = 'local';
       return this;
     } catch (err) {
       console.error('Failed to initialize SQLite WASM:', err);
@@ -80,6 +115,7 @@ export class Repository {
       await this.runMigrations();
       await this.seedDefaults();
       this.isReady = true;
+      this.mode = 'local';
       return this;
     }
 
@@ -90,6 +126,7 @@ export class Repository {
       await this.runMigrations();
       await this.seedDefaults();
       this.isReady = true;
+      this.mode = 'local';
       return this;
     }
 
@@ -145,6 +182,26 @@ export class Repository {
   }
 
   async exec(sql, params = []) {
+    if (this.mode === 'server') {
+      const res = await fetch('/api/server/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sql, params }),
+      });
+      if (res.status === 401) {
+        throw new Error('Sesión expirada o no autorizada');
+      }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Error al ejecutar en el servidor');
+      }
+      const data = await res.json();
+      return {
+        lastInsertRowId: Number(data.lastInsertRowId ?? 0),
+        changes: Number(data.changes ?? 0),
+      };
+    }
+
     if (!this.db && !this.promiser) throw new Error('Database not initialized');
 
     if (this.isNode) {
@@ -200,6 +257,23 @@ export class Repository {
   }
 
   async query(sql, params = []) {
+    if (this.mode === 'server') {
+      const res = await fetch('/api/server/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sql, params }),
+      });
+      if (res.status === 401) {
+        throw new Error('Sesión expirada o no autorizada');
+      }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Error al consultar en el servidor');
+      }
+      const data = await res.json();
+      return data.rows || [];
+    }
+
     if (!this.db && !this.promiser) throw new Error('Database not initialized');
 
     if (this.isNode) {
@@ -241,6 +315,12 @@ export class Repository {
   }
 
   async exportData() {
+    if (this.mode === 'server') {
+      const res = await fetch('/api/server/backup/export');
+      if (!res.ok) throw new Error('Error al exportar datos del servidor');
+      return res.json();
+    }
+
     const stages = await this.query('SELECT * FROM stages ORDER BY position ASC');
     const channels = await this.query('SELECT * FROM channels ORDER BY id ASC');
     const contentTypes = await this.query('SELECT * FROM content_types ORDER BY id ASC');
@@ -257,6 +337,19 @@ export class Repository {
   }
 
   async importData(payload) {
+    if (this.mode === 'server') {
+      const res = await fetch('/api/server/backup/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Error al importar datos en el servidor');
+      }
+      return true;
+    }
+
     if (!payload || !Array.isArray(payload.stages) || !Array.isArray(payload.contents)) {
       throw new Error('Formato de copia de seguridad no válido o dañado');
     }

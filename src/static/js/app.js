@@ -165,6 +165,7 @@ export async function bootstrapApp() {
         () => new SettingsView(viewContainer, {
           settingsService,
           backupService,
+          repository: repo,
           router,
         }),
         false,
