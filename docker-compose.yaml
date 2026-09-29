@@ -7,5 +7,9 @@ services:
     ports:
       - "5000:5000"
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       FLASK_APP: src.app
+    volumes:
+      - ./database:/app/database
