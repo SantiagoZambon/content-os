@@ -6,7 +6,7 @@ Aplicación web moderna y minimalista de gestión, planificación y redacción d
 
 # Video del Proyecto Completo
 
-[![Video donde desarrollamos el proyecto](https://img.youtube.com/vi/FHa3arhRZCY/hqdefault.jpg)](https://youtu.be/FHa3arhRZCY)
+[![Video donde desarrollamos el proyecto](https://img.youtube.com/vi/FHa3arhRZCY/maxresdefault.jpg)](https://youtu.be/FHa3arhRZCY)
 
 ---
 
