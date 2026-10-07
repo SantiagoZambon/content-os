@@ -4,11 +4,9 @@ Aplicación web moderna y minimalista de gestión, planificación y redacción d
 
 ---
 
-# Video donde desarrollamos el proyecto
+# Video del Proyecto Completo
 
-<a href="https://youtu.be/FHa3arhRZCY" target="_blank">
-  <img src="https://youtu.be/FHa3arhRZCY" alt="Video del proyecto" width="100%">
-</a>
+[![Video donde desarrollamos el proyecto](https://img.youtube.com/vi/FHa3arhRZCY/hqdefault.jpg)](https://youtu.be/FHa3arhRZCY)
 
 ---
 
